@@ -207,7 +207,7 @@ Bir bölüm tamamlandığında oyuncu XP sınırını aşar ve seviye (level) at
 ### 18- Savunmanın Felçli Düşman Turunda Sıfırlanmaması
 * **Dosya Adı ve Satır Aralığı:** `game/battle.py` (L100 - L104)
 * **Hatanın Sebebi:** Düşman saldırısı `0` dönse bile `is_defending` durumu bir sonraki tura kalıyordu. Oysa oyun kurallarına göre savunma sadece o tur için geçerli olmalı.
-* **Nasıl Çözdünüz:** Düşman saldırısı `0` dönse bile turun sonunda `self.player.is_defending = False` yapılarak savunma durumunu sıfırlandı.
+* **Nasıl Çözdünüz:** Düşman saldırısı `0` dönse bile turun sonunda `self.player.is_defending = False` yapılarak savunma durumu sıfırlandı.
 
 *(Not: Bu listeyi aşağıya doğru dilediğiniz kadar uzatabilirsiniz.)*
 
