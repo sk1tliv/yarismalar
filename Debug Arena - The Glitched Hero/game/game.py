@@ -1,5 +1,9 @@
-# TODO: Sınıf etkileşimleri için gerekli olan içe aktarma (import) işlemlerini tamamla
 import random
+
+from .battle import Battle
+from .character import Character
+from .data import CHAPTERS
+from .enemy import Enemy
 
 class Game:
     def __init__(self):
@@ -52,9 +56,6 @@ class Game:
                 return "lose"
 
             if result == "fled":
-                # TODO: Oyuncu bir düşmandan kaçtığında, o düşmanın mevcut can değerini (current HP) koru; canını tamamlama.
-                # Düşmanı mevcut HP'siyle kuyruğa ekle
-                enemy.current_hp = enemy.max_hp  
                 fled_enemies.append(enemy)
                 print(f"  Kaçtın! Ama {enemy.name} peşini bırakmayacak...")
                 continue
@@ -94,3 +95,4 @@ class Game:
         print("  TÜM BÖLÜMLER TAMAMLANDI! EFSANE KAHRAMAN!")
         print("=" * 45)
         self.player.show_stats()
+        

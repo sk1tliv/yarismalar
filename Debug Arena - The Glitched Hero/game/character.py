@@ -21,14 +21,16 @@ class Character:
         self.inventory.add_item(Item("İksir", "heal", 30, uses=2))
 
     def attack(self):
-        # TODO: Hasar formülünü uygula: (temel hasar + 0-5 arası rastgele + geçici boost). temp_damage_boost kullanıldıktan sonra 0'a sıfırla.
-        # toplam değeri döndür
-        return 0
+        total_damage = self.damage + random.randint(0, 5) + self.temp_damage_boost
+        self.temp_damage_boost = 0
+        return total_damage
 
     def defend(self):
+        self.is_defending = True
         print(f"  {self.name} savunma pozisyonu aldı! Bu tur %50 az hasar alacak.")
 
     def take_damage(self, damage):
+        before = self.current_hp
         if self.temp_shield > 0:
             blocked = min(self.temp_shield, damage)
             damage -= blocked
@@ -37,8 +39,8 @@ class Character:
         if self.is_defending:
             damage = damage // 2
             self.is_defending = False
-        self.current_hp -= damage
-        return damage
+        self.current_hp = max(0, self.current_hp - damage)
+        return before - self.current_hp
 
     # XP kazanma
     def gain_xp(self, amount):
@@ -51,8 +53,8 @@ class Character:
     def level_up(self):
         XP_THRESHOLDS = {2: 150, 3: 225, 4: 340, 5: 500}
         self.level += 1
-        # TODO: Seviye atlama sonrası XP birikimini sıfırla
-        # TODO: karakterin maksimum can havuzunu (Max HP) kural setine göre artır.
+        self.xp = 0
+        self.max_hp += 20
         self.xp_needed = XP_THRESHOLDS.get(self.level, 500)
         self.current_hp = self.max_hp
         self.damage += 2
@@ -76,4 +78,4 @@ class Character:
     # Karakterin istatistiklerini yazdırır
     def show_stats(self):
         print(f"  [{self.name}] HP: {self.current_hp}/{self.max_hp} | "
-              f"Level: {self.level} | XP: {self.xp}/{self.xp_needed}
+              f"Level: {self.level} | XP: {self.xp}/{self.xp_needed}")

@@ -26,18 +26,21 @@ class Item:
             print(f"  {self.name} kullanıldı! {self.effect_value} hasara karşı kalkan aktif.")
 
         elif self.item_type == "stun":
-            # TODO: Felç (stun) etkisi türünde, parametre olarak gelen düşmanın 'stunned' durumunu aktif hale getir.
+            if enemy is None:
+                print(f"  {self.name} kullanılamadı.")
+                return False
+            enemy.stunned = True
+            print(f"  {self.name} kullanıldı! {enemy.name} 1 tur felç oldu.")
 
-            pass
-
+        self.uses -= 1
         return True
     
 
     def __str__(self):
         type_labels = {
-            "heal": "İyileşme"
-            "attack_boost": "Saldırı Güçlendirme"
-            "shield": "Kalkan"
+            "heal": "İyileşme",
+            "attack_boost": "Saldırı Güçlendirme",
+            "shield": "Kalkan",
             "stun": "Felç"
         }
         label = type_labels.get(self.item_type, self.item_type)

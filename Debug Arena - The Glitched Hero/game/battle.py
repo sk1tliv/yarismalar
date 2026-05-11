@@ -7,6 +7,9 @@ class Battle:
         self.enemy = enemy
         self.turn_count = 0
         self.battle_log = []
+        self.damage_dealt = 0
+        self.damage_taken = 0
+        self.items_used = []
 
     def start_battle(self):
         print(f"\n  {'='*43}")
@@ -20,6 +23,7 @@ class Battle:
             result = self.player_turn()
 
             if result == "fled":
+                self.show_battle_summary("Kaçış")
                 return "fled"
 
             if self.enemy.is_alive():
@@ -46,6 +50,7 @@ class Battle:
         if choice == "1":
             damage = self.player.attack()
             actual = self.enemy.take_damage(damage)
+            self.damage_dealt += actual
             msg = f"  {self.player.name} saldırdı! {self.enemy.name} {actual} hasar aldı."
             print(msg)
             self.battle_log.append(msg)
@@ -58,7 +63,7 @@ class Battle:
             inv_result = self.use_inventory()
             if inv_result == "no_items":
                 print("  Envanterde kullanılabilir item yok!")
-            return "continue" # TODO: Oyuncu envanteri açıp bir işlem yaptıktan sonra, sırasını kaybetmeden hamle seçimine geri dönmesini sağla.
+            return self.player_turn()
         
         elif choice == "4":
             if random.random() < 0.5:
@@ -73,9 +78,9 @@ class Battle:
         return "continue"
 
     def use_inventory(self):
-        self.player.inventory.show()
         if not self.player.inventory.has_items():
             return "no_items"
+        self.player.inventory.show()
 
         while True:
             choice = input("  Kullanmak istediğin item numarası (0=geri): ").strip()
@@ -86,17 +91,20 @@ class Battle:
                 if 0 <= idx < len(self.player.inventory.items):
                     item = self.player.inventory.items[idx]
                     if item.uses > 0:
-                        item.use(self.player, self.enemy)
-                        self.player.inventory.remove_empty()
-                        return "used"
+                        if item.use(self.player, self.enemy):
+                            self.items_used.append(item.name)
+                            self.player.inventory.remove_empty()
+                            return "used"
             print("  Geçersiz seçim!")
 
-    def enemy_turn(self, damage_multiplier=1)  
+    def enemy_turn(self, damage_multiplier=1):
         damage = self.enemy.attack()
         if damage == 0:
+            self.player.is_defending = False
             return
         damage = int(damage * damage_multiplier)
         actual = self.player.take_damage(damage)
+        self.damage_taken += actual
         if damage_multiplier > 1:
             msg = f"  {self.enemy.name} öfkeyle saldırdı! {self.player.name} {actual} hasar aldı!"
         else:
@@ -111,12 +119,20 @@ class Battle:
         self.enemy.show_stats()
         print(f"  {'─'*43}")
 
+    def show_battle_summary(self, result):
+        used_items = ", ".join(self.items_used) if self.items_used else "Yok"
+        print(f"\n  Savaş Özeti: {result}")
+        print(f"  Tur: {self.turn_count} | Verilen Hasar: {self.damage_dealt} | Alınan Hasar: {self.damage_taken}")
+        print(f"  Kullanılan Itemler: {used_items}")
+
     def end_battle(self):
         print(f"\n  {'='*43}")
         if self.player.is_alive():
             print(f"  KAZANDIN! {self.enemy.name} yenildi!")
+            self.show_battle_summary("Zafer")
             self.player.gain_xp(self.enemy.get_xp_reward())
             return "win"
         else:
             print(f"  KAYBETTİN! {self.player.name} yenildi...")
+            self.show_battle_summary("Yenilgi")
             return "lose"
