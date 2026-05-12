@@ -127,7 +127,7 @@
 
 ---
 
-### 19- Hasar Çıktısı
+### 19- Print Fonksiyonu Parantez Eksiği
 * **Dosya Adı ve Satır Aralığı:** `game/character.py` (L80 - L81)
 * **Hatanın Sebebi:** Print fonksiyonu açılmış ancak kapanış parantezi yazılmamış.
 * **Nasıl Çözdünüz:** Parantez eklenerek düzeltildi.
