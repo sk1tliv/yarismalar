@@ -1,3 +1,5 @@
+# TURKISH AI COMMUNİTY - DEBUG ARENA
+
 ## ÇÖZÜLEN HATALAR FORMU
 
 ### 1- Saldırı Hasarı
