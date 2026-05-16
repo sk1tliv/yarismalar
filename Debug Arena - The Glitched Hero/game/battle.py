@@ -124,6 +124,26 @@ class Battle:
         print(f"\n  Savaş Özeti: {result}")
         print(f"  Tur: {self.turn_count} | Verilen Hasar: {self.damage_dealt} | Alınan Hasar: {self.damage_taken}")
         print(f"  Kullanılan Itemler: {used_items}")
+        achievements = self.get_achievements(result)
+        if achievements:
+            print("  Kazanılan Başarımlar:")
+            for achievement in achievements:
+                print(f"    - {achievement}")
+
+    def get_achievements(self, result):
+        if result != "Zafer":
+            return []
+
+        achievements = []
+        if self.turn_count <= 3:
+            achievements.append("Hızlı Zafer: Savaşı 3 tur veya daha kısa sürede kazandın.")
+        if not self.items_used:
+            achievements.append("Item Kullanmadan Zafer: Hiç item kullanmadan kazandın.")
+        if self.damage_taken == 0:
+            achievements.append("Dokunulmaz: Savaşı hiç hasar almadan bitirdin.")
+        if 0 < self.player.current_hp <= max(1, self.player.max_hp // 10):
+            achievements.append("Kıl Payı Zafer: Max HP'nin %10'u veya daha azıyla kazandın.")
+        return achievements
 
     def end_battle(self):
         print(f"\n  {'='*43}")
