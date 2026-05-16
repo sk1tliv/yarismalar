@@ -142,3 +142,10 @@
     * **Mevcut Dosya ise:** `game/battle.py` (L5 - L12, L25 - L26, L50 - L56, L92 - L97, L105 - L113, L122 - L137)
 
 ---
+
+### Bonus Özellik 2: Başarım Sistemi
+* **Nasıl Çalışıyor:** Savaş zaferle bittiğinde başarımlar hesaplanır ve savaş özetinin altında gösterilir. `Hızlı Zafer` ,`Saf Güç`,`Dokunulmaz`, `Kıl Payı` başarımları verilir. 
+* **Dosya ve Konum Bilgisi:** 
+    * **Mevcut Dosya ise:** `game/battle.py` (L127 - L146)
+
+---
